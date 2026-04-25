@@ -65,7 +65,16 @@ async def upload_files(files: List[UploadFile] = File(...)):
         if result_text.endswith("```"): result_text = result_text[:-3]
         
         data = json.loads(result_text.strip())
+        
+        if not data:
+            raise HTTPException(
+                status_code=400, 
+                detail="The uploaded document does not appear to contain any valid financial transactions. Please upload a receipt or bank statement."
+            )
+            
         return {"transactions": data}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

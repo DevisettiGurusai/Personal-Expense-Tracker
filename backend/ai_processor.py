@@ -64,15 +64,22 @@ def analyze_with_groq(document_content):
     - "Category": A categorized label (Choose ONLY from: Food & Dining, Groceries, Transport & Auto, Utilities, Entertainment, Shopping, Health & Medical, Housing, Insurance, Education, Personal Care, Subscriptions, Debt & Loans, Travel, Income/Refunds, Other). Try your best to categorize the item specifically; ONLY use 'Other' if absolutely necessary. (string)
     - "Type": The type of transaction (Choose ONLY from: Debit, Credit). 'Debit' is money spent/going out. 'Credit' is money received/coming in. (string)
     
+    IF THE TEXT DOES NOT APPEAR TO BE A RECEIPT, INVOICE, OR BANK STATEMENT, OR IF NO TRANSACTIONS CAN BE FOUND, YOU MUST RETURN AN EMPTY ARRAY []. 
+    Do not guess or hallucinate transactions if they are not clearly present.
+
     Return the result STRICTLY as a JSON array of objects. Do not include markdown formatting or any other text.
     Example output format:
     [
-      {"Date": "2023-10-25", "Merchant": "Starbucks", "Amount": 5.50, "Category": "Food & Dining", "Type": "Debit"},
-      {"Date": "2023-10-26", "Merchant": "Salary Deposit", "Amount": 1500.00, "Category": "Income/Refunds", "Type": "Credit"}
+      {"Date": "2023-10-25", "Merchant": "Starbucks", "Amount": 5.50, "Category": "Food & Dining", "Type": "Debit"}
     ]
     """
     
-    combined_text = "\n\n".join(document_content)
+    combined_text = "\n\n".join(document_content).strip()
+    
+    # Simple check for meaningless content
+    if not combined_text or len(combined_text) < 10 or "OCR Error" in combined_text:
+        return "[]"
+
     full_prompt = f"{prompt}\n\nRAW EXTRACTED TEXT:\n{combined_text}"
     
     response = client.chat.completions.create(
