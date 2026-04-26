@@ -61,6 +61,7 @@ def analyze_with_groq(document_content):
     - "Date": The date of the transaction (string, format YYYY-MM-DD if possible)
     - "Merchant": The name of the store or entity (string)
     - "Amount": The final net cost or amount spent (number, do not include currency symbols)
+    - "Currency": The currency symbol found (string, e.g., "$", "€", "₹"). If not found, default to "$".
     - "Category": A categorized label (Choose ONLY from: Food & Dining, Groceries, Transport & Auto, Utilities, Entertainment, Shopping, Health & Medical, Housing, Insurance, Education, Personal Care, Subscriptions, Debt & Loans, Travel, Income/Refunds, Other). Try your best to categorize the item specifically; ONLY use 'Other' if absolutely necessary. (string)
     - "Type": The type of transaction (Choose ONLY from: Debit, Credit). 'Debit' is money spent/going out. 'Credit' is money received/coming in. (string)
     
@@ -70,7 +71,7 @@ def analyze_with_groq(document_content):
     Return the result STRICTLY as a JSON array of objects. Do not include markdown formatting or any other text.
     Example output format:
     [
-      {"Date": "2023-10-25", "Merchant": "Starbucks", "Amount": 5.50, "Category": "Food & Dining", "Type": "Debit"}
+      {"Date": "2023-10-25", "Merchant": "Starbucks", "Amount": 5.50, "Currency": "$", "Category": "Food & Dining", "Type": "Debit"}
     ]
     """
     

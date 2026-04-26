@@ -38,7 +38,8 @@ export default function Dashboard({ apiBase }) {
     if (!data) return;
     setAdviceLoading(true);
     try {
-      const summaryText = `Income: $${data.summary.total_income}, Expenses: $${data.summary.total_expenses}. Categories: ${JSON.stringify(data.charts.categories)}`;
+      const currency = data.summary.currency || "$";
+      const summaryText = `Income: ${currency}${data.summary.total_income}, Expenses: ${currency}${data.summary.total_expenses}. Categories: ${JSON.stringify(data.charts.categories)}`;
       const res = await axios.post(`${apiBase}/advice`, { summary_text: summaryText });
       setAdvice(res.data.advice);
     } catch (err) {
@@ -72,19 +73,19 @@ export default function Dashboard({ apiBase }) {
             <div className="glass-card" style={{ textAlign: 'center' }}>
               <div style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>TOTAL INCOME</div>
               <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-income)' }}>
-                ${data.summary.total_income.toLocaleString()}
+                {data.summary.currency}{data.summary.total_income.toLocaleString()}
               </div>
             </div>
             <div className="glass-card" style={{ textAlign: 'center' }}>
               <div style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>TOTAL EXPENSES</div>
               <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--accent-expense)' }}>
-                ${data.summary.total_expenses.toLocaleString()}
+                {data.summary.currency}{data.summary.total_expenses.toLocaleString()}
               </div>
             </div>
             <div className="glass-card" style={{ textAlign: 'center' }}>
               <div style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>NET BALANCE</div>
               <div style={{ fontSize: '28px', fontWeight: 'bold', color: data.summary.net_balance >= 0 ? 'var(--accent-income)' : 'var(--accent-expense)' }}>
-                ${data.summary.net_balance.toLocaleString()}
+                {data.summary.currency}{data.summary.net_balance.toLocaleString()}
               </div>
             </div>
           </div>
@@ -163,7 +164,7 @@ export default function Dashboard({ apiBase }) {
                       <td>{t.Merchant}</td>
                       <td><span style={{ padding: '4px 8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>{t.Category}</span></td>
                       <td style={{ color: t.Type.toUpperCase() === 'DEBIT' ? 'var(--accent-expense)' : 'var(--accent-income)' }}>{t.Type}</td>
-                      <td style={{ fontWeight: 'bold' }}>${t.Amount.toLocaleString()}</td>
+                      <td style={{ fontWeight: 'bold' }}>{t.Currency}{t.Amount.toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>

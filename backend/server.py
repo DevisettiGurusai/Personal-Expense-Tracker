@@ -129,11 +129,17 @@ async def get_dashboard_data(data: dict):
             monthly = trend_df[trend_df['Type'].str.upper() == 'DEBIT'].groupby('Month')['Amount'].sum().reset_index()
             trend_data = monthly.sort_values('Month').to_dict(orient='records')
 
+        # Determine dominant currency (use the first one found, or most frequent)
+        currency_symbol = "$"
+        if not df.empty and 'Currency' in df.columns:
+            currency_symbol = df['Currency'].iloc[0] if not df['Currency'].empty else "$"
+
         return {
             "summary": {
                 "total_income": total_income,
                 "total_expenses": total_expenses,
-                "net_balance": net_balance
+                "net_balance": net_balance,
+                "currency": currency_symbol
             },
             "transactions": df.to_dict(orient='records'),
             "charts": {

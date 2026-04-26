@@ -112,6 +112,7 @@ export default function Uploader({ apiBase }) {
                   <th>Date</th>
                   <th>Merchant</th>
                   <th>Amount</th>
+                  <th>Curr</th>
                   <th>Category</th>
                   <th>Type</th>
                 </tr>
@@ -122,6 +123,7 @@ export default function Uploader({ apiBase }) {
                     <td><input type="text" value={row.Date} onChange={(e) => updateRow(idx, 'Date', e.target.value)} /></td>
                     <td><input type="text" value={row.Merchant} onChange={(e) => updateRow(idx, 'Merchant', e.target.value)} /></td>
                     <td><input type="number" value={row.Amount} onChange={(e) => updateRow(idx, 'Amount', parseFloat(e.target.value))} /></td>
+                    <td><input type="text" value={row.Currency} onChange={(e) => updateRow(idx, 'Currency', e.target.value)} style={{ width: '40px', textAlign: 'center' }} /></td>
                     <td>
                       <select value={row.Category} onChange={(e) => updateRow(idx, 'Category', e.target.value)}>
                         <option>Food & Dining</option>
